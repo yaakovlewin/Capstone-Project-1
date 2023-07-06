@@ -1,3 +1,4 @@
+# these are the questions that we are going to add
 questions = ["What is the largest planet in our solar system?","Who plays Indiana Jones?","What is the name of the most northern point of mainland Brittan?",
              "What country has the highest life expectancy?", "What company was originally called Cadabra?", "What is the worlds fastest bird?",
              "What country has won the most World Cups?"]
