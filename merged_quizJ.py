@@ -55,6 +55,17 @@ def ask_question(question):
     global score  # Add global keyword to access the global variable inside the function
     # asks user the question and stores it.
     print(question['question'])
+# keep track of answers in a list
+answers = []
+
+# tracking the score
+score = 0
+
+# function that takes in 1 question
+def ask_question(question):
+    global score  # Add global keyword to access the global variable inside the function
+    # asks user the question and stores it.
+    print(question['question'])
     for option in question['options']:
         print(option)
     user_answer = input("Enter your answer (A, B, C, or D): ")
@@ -68,11 +79,6 @@ def ask_question(question):
         print('Incorrect')
         # adds False in answer list
         answers.append(False)
-
-# Loop over question in questions array
-# and each time call ask_question function with corresponding question as a parameter
-for question in questions:
-    ask_question(question)
 
 print("That's all the questions, ", name, "! Let's see how you did!")
 print("Answers:", answers)
