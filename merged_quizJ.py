@@ -96,7 +96,6 @@ def ask_question(question):
     if user_answer.upper() == question['correct_answer']:
 
         print('correct answer')
-        # trackscore()
 
         # adds true in answer list
 
