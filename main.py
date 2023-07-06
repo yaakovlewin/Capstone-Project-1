@@ -40,8 +40,10 @@ questions= [
     }
 ]
 
-
-
+print("Welcome to our amazing quiz! Im sure you will have a great time!")
+print("You will be shown a question and a choice of four answers.")
+name = str(input("What is your name? Please add it here: "))
+print("Hello ",name,"Lets get going!")
 # keep track of answers in a list
 answers = []
 
@@ -49,6 +51,7 @@ answers = []
 def ask_question(question):
     # asks user the question and stores it.
     print(question['question'])
+    # gives the options
     for option in question['options']:
         print(option)
 
