@@ -34,9 +34,7 @@ questions = [
 
     {
         'question': "What country has the highest life expectancy?",
-
         'options': ["A. Japan", "B. Switzerland", "C. Australia", "D. Hong Kong"],
-
         'correct_answer': 'D'
     },
 
@@ -72,19 +70,17 @@ questions = [
 answers = []
 
 # tracking the score
-basescore = 0
-score = 10
-def trackscore():
-    basescore += score
+score = 0
+
+
 
 # function that takes in 1 question
 def ask_question(question):
+    global score  # Add global keyword to access the global variable inside the function
 
     # asks user the question and stores it.
     
     print(question['question'])
-
-    # gives user the options
     
     for option in question['options']:
 
@@ -104,6 +100,9 @@ def ask_question(question):
 
         # adds true in answer list
 
+        print('Correct answer')
+        score += 10
+        # adds True in answer list
         answers.append(True)
 
     else:
@@ -113,6 +112,8 @@ def ask_question(question):
 
         # adds false in answer list
 
+        print('Incorrect')
+        # adds False in answer list
         answers.append(False)
 
 
@@ -127,6 +128,6 @@ for question in questions:
     ask_question(question)
 
 
-print(answers)
+print("Answers:", answers)
 # should print the score out at the end
-print(basescore)
+print("Score:", score)
