@@ -20,7 +20,7 @@ questions= [
     },
     {
         'question': "What country has the highest life expectancy?",
-        'options': ["A. Japan", "B. Switzerland", "C. Australia", "D. Norway"],
+        'options': ["A. Japan", "B. Switzerland", "C. Australia", "D. Hong Kong"],
         'correct_answer': 'D'
     },
     {
