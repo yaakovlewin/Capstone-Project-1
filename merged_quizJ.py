@@ -100,6 +100,7 @@ def ask_question(question):
 
     print(question['question'])
 
+    # gives user the options
     for option in question['options']:
 
         print(option)
