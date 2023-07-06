@@ -1,8 +1,8 @@
 # Capstone-Project-1
 
 Capstone Project 1 Interactive Quiz Game in Python
-Capstone Project 1
-Interactive Quiz Game in Python
+
+
 Project Overview:
 In this project, you will create an interactive quiz game using Python in groups.
 The game will present a series of questions to the player, track their score, and
