@@ -126,7 +126,7 @@ for question in questions:
 
     ask_question(question)
 
-
+print("That's all the questions, ", name, "! Let's see how you did!")
 print("Answers:", answers)
 # should print the score out at the end
 print("Score:", score)
