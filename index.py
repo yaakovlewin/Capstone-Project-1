@@ -128,20 +128,17 @@ def ask_question(question):
                 number_of_points += 2
             else:
                 number_of_points += 1
-            time.sleep(2)
         else:
             # adds false in answer list
             answers.append(False)
             correct_answer = question["correct_answer"]
             print("INCORRECT!")
             print(f"The correct answer is {correct_answer}")
-            # 2 second pause so the user can read the correct answer
-            time.sleep(2)
     else:
         answers.append(False)
         correct_answer = question["correct_answer"]
         print(f"The correct answer is {correct_answer}")
-        time.sleep(2)  # 2 second pause so the user can read the correct answer
+    time.sleep(2)  # 2 second pause so the user can read the correct answer
 
 
 for question in questions:
