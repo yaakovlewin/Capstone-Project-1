@@ -8,11 +8,11 @@ import threading
 answers = []
 number_of_points = 0
 
-player_name = input("Player name: ")
+player_name = input("Player name: ").title()
 print(f"Welcome, {player_name}. We hope you enjoy our quiz!\n"
       f"There are 10 questions and you will have 10 seconds to answer each.\n"
       f"The questions have varying difficulties, with 1 point for easy, 2 for medium and 3 for hard. Good luck!")
-
+input("Press enter to start!")
 # Questions dict
 questions = [
     {
@@ -149,4 +149,24 @@ for question in questions:
 
 # Calculating the score
 score = sum(answers)
-print(f"You got {score}/10 correct for a score of: {number_of_points}!")
+print(f"You got {score}/10 correct for a score of {number_of_points}!")
+
+f = open("high_score.txt", 'r')
+lines = f.read().splitlines() # Read high_score.txt and save it as a list with name and score
+f.close()
+try: # Catches the error if there isn't a list or a file named high_score.txt
+    if number_of_points >= int(lines[1]): 
+        print("Congratulations! You have the new high score!")
+        f = open('high_score.txt', 'w')
+        f.writelines([f"{player_name} \n{number_of_points}"]) # Updates the text file with the new highscore
+        f.close()
+    else:
+        print(f"{lines[0]} currently has the highest score with {lines[1]} points!")
+except:
+    if not lines: # If there is no recorded high score in the text file, the user gets the new high score
+        print("Congratulations! You have the new high score!")
+        f = open('high_score.txt', 'w')
+        f.writelines([f"{player_name} \n{number_of_points}"])
+        f.close()
+    else:
+        print("This should never be seen but writing break or return is boring.")
