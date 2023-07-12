@@ -9,7 +9,7 @@ answers = []
 
 player_name = input("Gamer name: ")
 print(f"Welcome, {player_name}. Let's do some quiz!\n"
-      f"We have 10 questions and you will have 30 seconds to answer each. Good luck!")
+      f"We have 10 questions and you will have 10 seconds to answer each. Good luck!")
 
 # Questions dict
 questions = [
@@ -65,6 +65,18 @@ questions = [
     }
 ]
 
+
+def countdown(timer_time, timer_stop):
+    for i in range(timer_time, -1, -1):
+        print(f"Time: {i} sec")
+        if timer_stop[0]:
+            break
+        time.sleep(1)
+    else:
+        if not timer_stop[0]:
+            print("Time's up!")
+            timer_stop[0] = True
+
 # function that takes in 1 question
 
 
@@ -75,40 +87,34 @@ def ask_question(question):
         print(option)
 
     # Timer
-    countdown_sec = 30
-    user_answered = False
+    countdown_sec = 10
+    timer_stop = [False]
 
-    def countdown():
-        nonlocal user_answered
-        for i in range(countdown_sec, 0, -1):
-            if user_answered:
-                break
-            print(f"Time: {i} sec")
-            time.sleep(1)
-
-    timer_thread = threading.Thread(target=countdown)
+    timer_thread = threading.Thread(
+        target=countdown, args=(countdown_sec, timer_stop))
     timer_thread.start()
 
     # Get user's answer
-    user_answer = input("Enter your answer (A, B, C, or D): ")
-
-    # Set user_answered to True to stop the timer
-    user_answered = True
+    user_answer = ''
+    while user_answer == '' and not timer_stop[0]:
+        user_answer = input("Enter your answer (A, B, C, or D): ").upper()
 
     # Stop the timer and join the thread
+    timer_stop[0] = True
     timer_thread.join()
 
-    # check if the answer is correct
-    if user_answer.upper() == question["correct_answer"]:
-        print("CORRECT!")
-        # adds true in answer list
-        answers.append(True)
-    else:
-        # adds false in answer list
-        answers.append(False)
-        correct_answer = question["correct_answer"]
-        print("INCORRECT!")
-        print(f"The correct answer is {correct_answer}")
+    if user_answer != '':
+        # check if the answer is correct
+        if user_answer.upper() == question["correct_answer"]:
+            print("CORRECT!")
+            # adds true in answer list
+            answers.append(True)
+        else:
+            # adds false in answer list
+            answers.append(False)
+            correct_answer = question["correct_answer"]
+            print("INCORRECT!")
+            print(f"The correct answer is {correct_answer}")
 
 
 for question in questions:
