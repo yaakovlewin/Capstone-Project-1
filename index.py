@@ -1,16 +1,18 @@
 # Capstone-Project-1
 
-#Importing
-import time, threading
+# Importing
+import time
+import threading
+
 # keep track of answers in a list
 answers = []
 
 player_name = input("Gamer name: ")
-print(f""""Welcome, {player_name}. Let's do some quiz!
-We have 10 questions and you will have 30 seconds to answer each. good luck!""")
+print(f"Welcome, {player_name}. Let's do some quiz!\n"
+      f"We have 10 questions and you will have 30 seconds to answer each. Good luck!")
 
 # Questions dict
-questions= [ 
+questions = [
     {
         'question': 'What is the largest planet in our solar system?',
         'options': ['A. Mars', 'B. Saturn', 'C. Jupiter', 'D. Venus'],
@@ -51,57 +53,67 @@ questions= [
         'options': ["A. English", "B. Italian", "C. Spanish", "D. French"],
         'correct_answer': 'C'
     },
-     {
+    {
         'question': "Who painted the Mona Lisa??",
         'options': ["A. Leonardo da Vinci", "B. Van Gogh", "C. Michelangelo", "D. Sandro Botticelli"],
         'correct_answer': 'A'
     },
-     {
+    {
         'question': "Which planet is closest to the sun?",
         'options': ["A. Mars", "B. Uranus", "C. Earth", "D. Mercury"],
         'correct_answer': 'D'
     }
-    ]
+]
 
 # function that takes in 1 question
+
+
 def ask_question(question):
     # asks user the question and stores it.
     print(question["question"])
     for option in question["options"]:
         print(option)
 
-    #Timer
-    countdown_sec = 10
+    # Timer
+    countdown_sec = 30
+    user_answered = False
 
     def countdown():
-      for i in range (countdown_sec, 0, -1):
-       print(f"Time: {i} sec")
-       time.sleep(1)
+        nonlocal user_answered
+        for i in range(countdown_sec, 0, -1):
+            if user_answered:
+                break
+            print(f"Time: {i} sec")
+            time.sleep(1)
 
-    timer_thread = threading.Thread(target = countdown)
+    timer_thread = threading.Thread(target=countdown)
     timer_thread.start()
 
-    #Get user's answer
+    # Get user's answer
     user_answer = input("Enter your answer (A, B, C, or D): ")
 
-     # Stop the timer and join the thread
+    # Set user_answered to True to stop the timer
+    user_answered = True
+
+    # Stop the timer and join the thread
     timer_thread.join()
 
     # check if the answer is correct
     if user_answer.upper() == question["correct_answer"]:
-      print("CORRECT!")
-      # adds true in answer list
-      answers.append(True)
+        print("CORRECT!")
+        # adds true in answer list
+        answers.append(True)
     else:
-    # adds false in answer list
-      answers.append(False)
-      correct_answer = question["correct_answer"]
-      print("INCORRECT!")
-      print(f"The correct answer is {correct_answer}")
-      
+        # adds false in answer list
+        answers.append(False)
+        correct_answer = question["correct_answer"]
+        print("INCORRECT!")
+        print(f"The correct answer is {correct_answer}")
+
+
 for question in questions:
     ask_question(question)
 
-#Calculating the score
+# Calculating the score
 score = sum(answers)
 print(f"You got {score}/10 right!")
