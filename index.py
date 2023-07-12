@@ -6,62 +6,74 @@ import threading
 
 # keep track of answers in a list
 answers = []
+number_of_points = 0
 
-player_name = input("Gamer name: ")
-print(f"Welcome, {player_name}. Let's do some quiz!\n"
-      f"We have 10 questions and you will have 10 seconds to answer each. Good luck!")
+player_name = input("Player name: ")
+print(f"Welcome, {player_name}. We hope you enjoy our quiz!\n"
+      f"There are 10 questions and you will have 10 seconds to answer each.\n"
+      f"The questions have varying difficulties, with 1 point for easy, 2 for medium and 3 for hard. Good luck!")
 
 # Questions dict
 questions = [
     {
         'question': 'What is the largest planet in our solar system?',
         'options': ['A. Mars', 'B. Saturn', 'C. Jupiter', 'D. Venus'],
-        'correct_answer': 'C'
+        'correct_answer': 'C',
+        'difficulty': 'EASY'
     },
     {
         'question': "Who plays Indiana Jones?",
         'options': ["A. Harrison Ford", "B. Tom Cruise", "C. Brad Pitt", "D. Leonardo DiCaprio"],
-        'correct_answer': 'A'
+        'correct_answer': 'A',
+        'difficulty': 'EASY'
     },
     {
         'question': "What is the name of the most northern part of mainland Britain?",
         'options': ["A. John o' Groats", "B. Land's End", "C. Loch Ness", "D. Snowdonia"],
-        'correct_answer': 'A'
+        'correct_answer': 'A',
+        'difficulty': 'EASY'
     },
     {
         'question': "What country has the highest life expectancy?",
         'options': ["A. Japan", "B. Switzerland", "C. Australia", "D. Norway"],
-        'correct_answer': 'D'
+        'correct_answer': 'D',
+        'difficulty': 'EASY'
     },
     {
         'question': "What company was originally called Cadabra?",
         'options': ["A. Amazon", "B. Google", "C. Microsoft", "D. Apple"],
-        'correct_answer': 'A'
+        'correct_answer': 'A',
+        'difficulty': 'HARD'
     },
     {
         'question': "What is the world's fastest bird?",
         'options': ["A. Peregrine Falcon", "B. Ostrich", "C. Hummingbird", "D. Swift"],
-        'correct_answer': 'A'
+        'correct_answer': 'A',
+        'difficulty': 'MEDIUM'
     },
     {
         'question': "What country has won the most World Cups?",
         'options': ["A. Brazil", "B. Germany", "C. Italy", "D. Argentina"],
-        'correct_answer': 'A'
+        'correct_answer': 'A',
+        'difficulty': 'MEDIUM'
     },
     {
-        'question': "Which language has the more native speakers?",
+        'question': "Which language has the most native speakers?",
         'options': ["A. English", "B. Italian", "C. Spanish", "D. French"],
-        'correct_answer': 'C'
+        'correct_answer': 'C',
+        'difficulty': 'HARD'
     },
     {
-        'question': "Who painted the Mona Lisa??",
+        'question': "Who painted the Mona Lisa?",
         'options': ["A. Leonardo da Vinci", "B. Van Gogh", "C. Michelangelo", "D. Sandro Botticelli"],
-        'correct_answer': 'A'
+        'correct_answer': 'A',
+        'difficulty': 'MEDIUM'
     },
     {
         'question': "Which planet is closest to the sun?",
         'options': ["A. Mars", "B. Uranus", "C. Earth", "D. Mercury"],
-        'correct_answer': 'D'
+        'correct_answer': 'D',
+        'difficulty': 'EASY'
     }
 ]
 
@@ -109,12 +121,27 @@ def ask_question(question):
             print("CORRECT!")
             # adds true in answer list
             answers.append(True)
+            global number_of_points  # Changing variable within function so I need to call global
+            if question["difficulty"] == 'HARD':  # Points system
+                number_of_points += 3
+            elif question["difficulty"] == 'MEDIUM':
+                number_of_points += 2
+            else:
+                number_of_points += 1
+            time.sleep(2)
         else:
             # adds false in answer list
             answers.append(False)
             correct_answer = question["correct_answer"]
             print("INCORRECT!")
             print(f"The correct answer is {correct_answer}")
+            # 2 second pause so the user can read the correct answer
+            time.sleep(2)
+    else:
+        answers.append(False)
+        correct_answer = question["correct_answer"]
+        print(f"The correct answer is {correct_answer}")
+        time.sleep(2)  # 2 second pause so the user can read the correct answer
 
 
 for question in questions:
@@ -122,4 +149,4 @@ for question in questions:
 
 # Calculating the score
 score = sum(answers)
-print(f"You got {score}/10 right!")
+print(f"You got {score}/10 correct for a score of: {number_of_points}!")
