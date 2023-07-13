@@ -3,6 +3,13 @@
 # Importing
 import time
 import threading
+from os.path import exists as file_exists
+
+if file_exists('high_score.txt'): # Checks to see if the file exists, if it does the program continues. if not, create the text file
+    pass
+else:
+    f = open("high_score.txt", 'w')
+    f.close()
 
 # keep track of answers in a list
 answers = []
@@ -77,7 +84,6 @@ questions = [
     }
 ]
 
-
 def countdown(timer_time, timer_stop):
     print(f"You have {timer_time} seconds to answer:")
     for i in range(timer_time, -1, -1):
@@ -88,7 +94,6 @@ def countdown(timer_time, timer_stop):
         if not timer_stop[0]:
             print("Time's up!")
             timer_stop[0] = True
-
 
 def process_answer(user_answer, correct_answer, difficulty):
     if user_answer.upper() == correct_answer:
@@ -108,9 +113,7 @@ def process_answer(user_answer, correct_answer, difficulty):
         print("INCORRECT!")
         print(f"The correct answer is {correct_answer}")
 
-# function that takes in 1 question
-
-
+# Function that takes in 1 question
 def ask_question(question):
     # asks user the question and stores it.
     print(question["question"])
@@ -143,7 +146,7 @@ def ask_question(question):
         print(f"The correct answer is {correct_answer}")
     time.sleep(2)  # 2 second pause so the user can read the correct answer
 
-
+# For loop to ask each question in order
 for question in questions:
     ask_question(question)
 
@@ -152,9 +155,9 @@ score = sum(answers)
 print(f"You got {score}/10 correct for a score of {number_of_points}!")
 
 f = open("high_score.txt", 'r')
-# Read high_score.txt and save it as a list with name and score
-lines = f.read().splitlines()
+lines = f.read().splitlines() # Read high_score.txt and save it as a list with name and score
 f.close()
+
 try:  # Catches the error if there isn't a list or a file named high_score.txt
     if number_of_points >= int(lines[1]):
         print("Congratulations! You have the new high score!")
@@ -172,4 +175,4 @@ except:
         f.writelines([f"{player_name} \n{number_of_points}"])
         f.close()
     else:
-        print("This should never be seen but writing break or return is boring.")
+        raise Exception("An error has occured. ")
