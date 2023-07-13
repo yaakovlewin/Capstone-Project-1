@@ -1,5 +1,4 @@
 # Capstone-Project-1
-
 # Importing
 import time
 import threading
@@ -11,10 +10,6 @@ if file_exists('high_score.txt'):
 else:
     f = open("high_score.txt", 'w')
     f.close()
-
-# keep track of answers in a list
-answers = []
-number_of_points = 0
 
 
 def display_welcome_message(player_name):
@@ -87,6 +82,10 @@ questions = [
     }
 ]
 
+# keep track of answers in a list
+answers = []
+number_of_points = 0
+
 
 def countdown(timer_time, timer_stop):
     print(f"You have {timer_time} seconds to answer:")
@@ -134,6 +133,8 @@ def ask_question(question):
         print(f"The correct answer is {correct_answer}")
     time.sleep(2)  # 2 second pause so the user can read the correct answer
 
+# Answer logic
+
 
 def process_answer(user_answer, correct_answer, difficulty):
     if user_answer.upper() == correct_answer:
@@ -154,7 +155,13 @@ def process_answer(user_answer, correct_answer, difficulty):
         print(f"The correct answer is {correct_answer}")
 
 
+def print_score(answers, points):
+    score = sum(answers)
+    print(f"You got {score}/10 correct for a score of {points}!")
+
 # Calculating the score
+
+
 def update_high_score(player_name, number_of_points, lines):
     try:  # Catches the error if there isn't a list or a file named high_score.txt
         if number_of_points >= int(lines[1]):
@@ -193,8 +200,7 @@ def play_quiz():
     for question in questions:
         ask_question(question)
 
-    score = sum(answers)
-    print(f"You got {score}/10 correct for a score of {number_of_points}!")
+    print_score(answers, number_of_points)
 
     lines = read_high_score_file()
 
