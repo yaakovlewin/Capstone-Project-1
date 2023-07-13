@@ -5,7 +5,8 @@ import time
 import threading
 from os.path import exists as file_exists
 
-if file_exists('high_score.txt'): # Checks to see if the file exists, if it does the program continues. if not, create the text file
+# Checks to see if the file exists, if it does the program continues. if not, create the text file
+if file_exists('high_score.txt'):
     pass
 else:
     f = open("high_score.txt", 'w')
@@ -15,11 +16,13 @@ else:
 answers = []
 number_of_points = 0
 
-player_name = input("Player name: ").title()
-print(f"Welcome, {player_name}. We hope you enjoy our quiz!\n"
-      f"There are 10 questions and you will have 10 seconds to answer each.\n"
-      f"The questions have varying difficulties, with 1 point for easy, 2 for medium and 3 for hard. Good luck!")
-input("Press enter to start!")
+
+def display_welcome_message(player_name):
+    print(f"Welcome, {player_name}. We hope you enjoy our quiz!\n"
+          f"There are 10 questions, and you will have 10 seconds to answer each.\n"
+          f"The questions have varying difficulties, with 1 point for easy, 2 for medium, and 3 for hard. Good luck!")
+
+
 # Questions dict
 questions = [
     {
@@ -84,6 +87,7 @@ questions = [
     }
 ]
 
+
 def countdown(timer_time, timer_stop):
     print(f"You have {timer_time} seconds to answer:")
     for i in range(timer_time, -1, -1):
@@ -95,35 +99,19 @@ def countdown(timer_time, timer_stop):
             print("Time's up!")
             timer_stop[0] = True
 
-def process_answer(user_answer, correct_answer, difficulty):
-    if user_answer.upper() == correct_answer:
-        print("CORRECT!")
-        # adds true in answer list
-        answers.append(True)
-        if difficulty == 'HARD':  # Points system
-            global number_of_points
-            number_of_points += 3
-        elif difficulty == 'MEDIUM':
-            number_of_points += 2
-        else:
-            number_of_points += 1
-    else:
-        # adds false in answer list
-        answers.append(False)
-        print("INCORRECT!")
-        print(f"The correct answer is {correct_answer}")
 
 # Function that takes in 1 question
 def ask_question(question):
     # asks user the question and stores it.
     print(question["question"])
+    time.sleep(1)  # to give time for the user to read the question
     for option in question["options"]:
         print(option)
 
-    # Timer
+    # Timer and Timer stoper
     countdown_sec = 10
     timer_stop = [False]
-
+    # Start timer
     timer_thread = threading.Thread(
         target=countdown, args=(countdown_sec, timer_stop))
     timer_thread.start()
@@ -146,33 +134,71 @@ def ask_question(question):
         print(f"The correct answer is {correct_answer}")
     time.sleep(2)  # 2 second pause so the user can read the correct answer
 
-# For loop to ask each question in order
-for question in questions:
-    ask_question(question)
+
+def process_answer(user_answer, correct_answer, difficulty):
+    if user_answer.upper() == correct_answer:
+        print("CORRECT!")
+        # adds true in answer list
+        answers.append(True)
+        if difficulty == 'HARD':  # Points system
+            global number_of_points
+            number_of_points += 3
+        elif difficulty == 'MEDIUM':
+            number_of_points += 2
+        else:
+            number_of_points += 1
+    else:
+        # adds false in answer list
+        answers.append(False)
+        print("INCORRECT!")
+        print(f"The correct answer is {correct_answer}")
+
 
 # Calculating the score
-score = sum(answers)
-print(f"You got {score}/10 correct for a score of {number_of_points}!")
+def update_high_score(player_name, number_of_points, lines):
+    try:  # Catches the error if there isn't a list or a file named high_score.txt
+        if number_of_points >= int(lines[1]):
+            print("Congratulations! You have the new high score!")
+            f = open('high_score.txt', 'w')
+            # Updates the text file with the new highscore
+            f.writelines([f"{player_name} \n{number_of_points}"])
+            f.close()
+        else:
+            print(
+                f"{lines[0]} currently has the highest score with {lines[1]} points!")
+    except:
+        if not lines:  # If there is no recorded high score in the text file, the user gets the new high score
+            print("Congratulations! You have the new high score!")
+            f = open('high_score.txt', 'w')
+            f.writelines([f"{player_name} \n{number_of_points}"])
+            f.close()
+        else:
+            raise Exception("An error has occured. ")
 
-f = open("high_score.txt", 'r')
-lines = f.read().splitlines() # Read high_score.txt and save it as a list with name and score
-f.close()
 
-try:  # Catches the error if there isn't a list or a file named high_score.txt
-    if number_of_points >= int(lines[1]):
-        print("Congratulations! You have the new high score!")
-        f = open('high_score.txt', 'w')
-        # Updates the text file with the new highscore
-        f.writelines([f"{player_name} \n{number_of_points}"])
-        f.close()
-    else:
-        print(
-            f"{lines[0]} currently has the highest score with {lines[1]} points!")
-except:
-    if not lines:  # If there is no recorded high score in the text file, the user gets the new high score
-        print("Congratulations! You have the new high score!")
-        f = open('high_score.txt', 'w')
-        f.writelines([f"{player_name} \n{number_of_points}"])
-        f.close()
-    else:
-        raise Exception("An error has occured. ")
+def read_high_score_file():
+    f = open("high_score.txt", 'r')
+    # Read high_score.txt and save it as a list with name and score
+    lines = f.read().splitlines()
+    f.close()
+    return lines
+
+
+def play_quiz():
+    player_name = input("Player name: ").title()
+    display_welcome_message(player_name)
+    input("Press enter to start!")
+
+# For loop to ask each question in order
+    for question in questions:
+        ask_question(question)
+
+    score = sum(answers)
+    print(f"You got {score}/10 correct for a score of {number_of_points}!")
+
+    lines = read_high_score_file()
+
+    update_high_score(player_name, number_of_points, lines)
+
+
+play_quiz()
