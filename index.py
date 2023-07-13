@@ -79,8 +79,8 @@ questions = [
 
 
 def countdown(timer_time, timer_stop):
+    print(f"You have {timer_time} seconds to answer:")
     for i in range(timer_time, -1, -1):
-        print(f"Time: {i} sec")
         if timer_stop[0]:
             break
         time.sleep(1)
@@ -88,6 +88,25 @@ def countdown(timer_time, timer_stop):
         if not timer_stop[0]:
             print("Time's up!")
             timer_stop[0] = True
+
+
+def process_answer(user_answer, correct_answer, difficulty):
+    if user_answer.upper() == correct_answer:
+        print("CORRECT!")
+        # adds true in answer list
+        answers.append(True)
+        if difficulty == 'HARD':  # Points system
+            global number_of_points
+            number_of_points += 3
+        elif difficulty == 'MEDIUM':
+            number_of_points += 2
+        else:
+            number_of_points += 1
+    else:
+        # adds false in answer list
+        answers.append(False)
+        print("INCORRECT!")
+        print(f"The correct answer is {correct_answer}")
 
 # function that takes in 1 question
 
@@ -116,24 +135,8 @@ def ask_question(question):
     timer_thread.join()
 
     if user_answer != '':
-        # check if the answer is correct
-        if user_answer.upper() == question["correct_answer"]:
-            print("CORRECT!")
-            # adds true in answer list
-            answers.append(True)
-            global number_of_points  # Changing variable within function so I need to call global
-            if question["difficulty"] == 'HARD':  # Points system
-                number_of_points += 3
-            elif question["difficulty"] == 'MEDIUM':
-                number_of_points += 2
-            else:
-                number_of_points += 1
-        else:
-            # adds false in answer list
-            answers.append(False)
-            correct_answer = question["correct_answer"]
-            print("INCORRECT!")
-            print(f"The correct answer is {correct_answer}")
+        process_answer(
+            user_answer, question["correct_answer"], question["difficulty"])
     else:
         answers.append(False)
         correct_answer = question["correct_answer"]
@@ -149,18 +152,21 @@ score = sum(answers)
 print(f"You got {score}/10 correct for a score of {number_of_points}!")
 
 f = open("high_score.txt", 'r')
-lines = f.read().splitlines() # Read high_score.txt and save it as a list with name and score
+# Read high_score.txt and save it as a list with name and score
+lines = f.read().splitlines()
 f.close()
-try: # Catches the error if there isn't a list or a file named high_score.txt
-    if number_of_points >= int(lines[1]): 
+try:  # Catches the error if there isn't a list or a file named high_score.txt
+    if number_of_points >= int(lines[1]):
         print("Congratulations! You have the new high score!")
         f = open('high_score.txt', 'w')
-        f.writelines([f"{player_name} \n{number_of_points}"]) # Updates the text file with the new highscore
+        # Updates the text file with the new highscore
+        f.writelines([f"{player_name} \n{number_of_points}"])
         f.close()
     else:
-        print(f"{lines[0]} currently has the highest score with {lines[1]} points!")
+        print(
+            f"{lines[0]} currently has the highest score with {lines[1]} points!")
 except:
-    if not lines: # If there is no recorded high score in the text file, the user gets the new high score
+    if not lines:  # If there is no recorded high score in the text file, the user gets the new high score
         print("Congratulations! You have the new high score!")
         f = open('high_score.txt', 'w')
         f.writelines([f"{player_name} \n{number_of_points}"])
